@@ -1,0 +1,25 @@
+name: Update data.json
+
+on:
+  repository_dispatch:   # bisa dipanggil dari luar via API
+  workflow_dispatch:     # bisa dijalankan manual dari GitHub
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Update data.json
+        run: |
+          echo '${{ github.event.client_payload.jsondata }}' > data.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "bot@github.com"
+          git config --global user.name "AutoBot"
+          git add data.json
+          git commit -m "Auto update data.json"
+          git push
